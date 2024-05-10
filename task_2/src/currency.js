@@ -1,6 +1,4 @@
-import { onMount } from 'svelte'
-
-export const translations = {
+const translations = {
     "USD": "Доллар США",
     "AED": "Дирхам ОАЭ",
     "AFN": "Афгани",
@@ -165,9 +163,13 @@ export const translations = {
     "ZWL": "Доллар Зимбабве"
 }
 
-export const rates = await fetch('https://open.er-api.com/v6/latest/USD')
-  .then(response => response.json())
-  .then(currency => currency['rates']);
+// export const rates = await 
+
+export async function fetchingRates(){
+    return await fetch('https://open.er-api.com/v6/latest/USD')
+    .then(response => response.json())
+    .then(currency => currency['rates']);
+}
 
 export function translate(currency) {
     return translations[currency]

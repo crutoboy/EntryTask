@@ -5,12 +5,22 @@
 </script> -->
 
 <script>
-  import { rates, translate } from '/src/currency.js' 
+  import { fetchingRates, translate } from '/src/currency.js' 
+  import { onMount } from 'svelte'
+
+  let rates
 
   let currency1 = 'USD'
   let currency2 = 'RUB'
   let valueMoney1 = 1
-  let valueMoney2 = rates['RUB']
+  let valueMoney2 = 10
+
+  onMount(async ()=>{
+    rates = await fetchingRates()
+    valueMoney2 = rates['RUB']
+  })
+
+  
 
   function onChageFirstCurrency(){
     valueMoney2 = valueMoney1 / rates[currency1] * rates[currency2]
@@ -24,6 +34,7 @@
 
 <main>
   <div class="container">
+    {#if rates}
     <select name="" id="" bind:value={currency1} on:change={onChageFirstCurrency}>
       {#each Object.keys(rates) as currency}
         <option value={currency}>
@@ -39,6 +50,9 @@
         </option>
       {/each}
     </select> 
+    {:else}
+      <p>Loading...</p>
+    {/if}
   </div>
 
   <div class="container">
