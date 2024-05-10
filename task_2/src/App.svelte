@@ -1,52 +1,48 @@
-<!-- <script lang="ts">
-  // import svelteLogo from './assets/svelte.svg'
-  // import viteLogo from '/vite.svg'
-  // import Counter from './lib/Counter.svelte'
-</script> -->
-
 <script>
   import { fetchingRates, translate } from '/src/currency.js' 
   import { onMount } from 'svelte'
 
-  let rates
+  // объявление переменных
+  let rates // переменная для хранения курсов валют
+  let currency1 // валюта для первого поля
+  let currency2 // валюта для второго поля
+  let valueMoney1 // количество валюты первого поля
+  let valueMoney2 // количество валюты второго поля
 
-  let currency1 = 'USD'
-  let currency2 = 'RUB'
-  let valueMoney1 = 1
-  let valueMoney2 = 10
-
-  onMount(async ()=>{
+  onMount(async () => {
     rates = await fetchingRates()
-    valueMoney2 = rates['RUB']
+    currency1 = 'USD'           // устанавливаем валюту по умолчанию для первого поля
+    currency2 = 'RUB'           // устанавливаем валюту по умолчанию для второго поля
+    valueMoney1 = 1             // устанавливаем количество валюты первого поля по умолчанию
+    valueMoney2 = rates['RUB']  // устанавливаем количество валюты второго поля по умолчанию
   })
 
-  
-
-  function onChageFirstCurrency(){
+  // функция для обновления второго поля при изменении первого поля
+  function onChageFirstCurrency() { 
     valueMoney2 = valueMoney1 / rates[currency1] * rates[currency2]
   }
 
-  function onChageSecondCurrency(){
+  // функция для обновления первого поля при изменении второго поля
+  function onChageSecondCurrency() { 
     valueMoney1 = valueMoney2 / rates[currency2] * rates[currency1]
   }
-
 </script>
 
 <main>
   <div class="container">
     {#if rates}
-    <select name="" id="" bind:value={currency1} on:change={onChageFirstCurrency}>
+    <select bind:value={currency1} on:change={onChageFirstCurrency}>
       {#each Object.keys(rates) as currency}
         <option value={currency}>
-          {`${translate(currency)} (${currency})`}
+          {`${translate(currency)} (${currency})`} <!-- отображаем название и код валюты с помощью функции translate -->
         </option>
       {/each}
     </select>
 
-    <select name="" id="" bind:value={currency2} on:change={onChageSecondCurrency}>
+    <select bind:value={currency2} on:change={onChageSecondCurrency}>
       {#each Object.keys(rates) as currency}
         <option value={currency}>
-          {`${translate(currency)} (${currency})`}
+          {`${translate(currency)} (${currency})`} <!-- отображаем название и код валюты с помощью функции translate -->
         </option>
       {/each}
     </select> 
@@ -56,26 +52,7 @@
   </div>
 
   <div class="container">
-    <input type="number" name="" id="" class="inp" bind:value={valueMoney1} on:change={onChageFirstCurrency}>
-    <input type="number" name="" id="" class="inp" bind:value={valueMoney2} on:change={onChageSecondCurrency}>
+    <input type="number" bind:value={valueMoney1} on:change={onChageFirstCurrency}>
+    <input type="number" bind:value={valueMoney2} on:change={onChageSecondCurrency}>
   </div>
-
 </main>
-
-<style>
-  .logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-    transition: filter 300ms;
-  }
-  .logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
-  }
-  .logo.svelte:hover {
-    filter: drop-shadow(0 0 2em #ff3e00aa);
-  }
-  .read-the-docs {
-    color: #888;
-  }
-</style>

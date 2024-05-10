@@ -163,14 +163,15 @@ const translations = {
     "ZWL": "Доллар Зимбабве"
 }
 
-// export const rates = await 
-
+// Функция для получения курсов валют
 export async function fetchingRates(){
     return await fetch('https://open.er-api.com/v6/latest/USD')
     .then(response => response.json())
     .then(currency => currency['rates']);
 }
 
+
+// Функция для перевода кода валюты на ее название
 export function translate(currency) {
     return translations[currency]
 }
